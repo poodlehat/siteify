@@ -4,6 +4,18 @@ var Pages = require('./../models').Pages,
       Siteify = require('./../models').Siteify,
       relations = require('relations');
 
+/* See if the page exists
+ ============================= */
+module.exports.unique = function (req, res, next) {
+  //TODO: Sort out more robust path check.  Currently duplicating code in the schema.
+  var path = '/' + req.body.title.toLowerCase().split(' ').join('-') + '/';
+  Pages.findOne({ path : path }, function (err, page) {
+    if (err) return next(err);
+    var statusCode = page ? 401 : 200;
+    res.send(statusCode);
+  });
+};
+
 module.exports.new = function (req, res, next) {
 
   Siteify.findOne({}, function (err, siteify) {
@@ -21,7 +33,10 @@ module.exports.new = function (req, res, next) {
           }, function (err, page) {
             if(err) return next(err);
 
-            if(page.homepage) {
+            if (page.errorCode){
+              res.send(page.errorCode, page.message);
+            }
+            else if(page.homepage) {
               Siteify.setHomePageId({
                 homepageid : page._id
               }, function (err, siteify) {

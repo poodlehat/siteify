@@ -28,6 +28,7 @@ module.exports = function (app) {
 
    /* Pages
   ==================================== */
+  app.post('/api/pages/unique', Controllers.Pages.unique);
   app.post('/api/pages/new', app.oauth.authorise(), Controllers.Pages.new);
   app.post('/api/pages/delete', app.oauth.authorise(), Controllers.Pages.delete);
   app.get('/api/pages/all', Controllers.Pages.all);
