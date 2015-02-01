@@ -32,7 +32,7 @@ var PagesSchema = new mongoose.Schema({
   },
   homepage : {
     type : Boolean,
-    defafult : false
+    default : false
   },
   nav : {
     type : Boolean,
